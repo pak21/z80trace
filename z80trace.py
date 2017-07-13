@@ -15,23 +15,44 @@ class Node:
 
 nodes = {}
 last_node = None
+node_before_interrupt = None
+in_interrupt = False
+just_entered_interrupt = None
+interrupt_call_level = None
 
 with open(sys.argv[1]) as f:
     for line in f:
         pc = line.rstrip()
 
-        if pc in nodes:
-            node = nodes[pc]
+        if pc == "Interrupt":
+            in_interrupt = True
+            just_entered_interrupt = True
+            interrupt_call_level = 1
+        elif pc == "CALL":
+            if in_interrupt:
+                interrupt_call_level = interrupt_call_level + 1
+        elif pc == "RET":
+            if in_interrupt:
+                interrupt_call_level = interrupt_call_level - 1
+                if interrupt_call_level == 0:
+                    last_node = node_before_interrupt
+                    in_interrupt = False
         else:
-            node = Node(pc)
-            nodes[pc] = node
+            if pc in nodes:
+                node = nodes[pc]
+            else:
+                node = Node(pc)
+                nodes[pc] = node
 
-        if last_node is not None:
-            if node not in last_node.next:
-                last_node.next.append(node)
-                node.prev.append(last_node)
+            if just_entered_interrupt:
+                node_before_interrupt = last_node
+                just_entered_interrupt = False
+            elif last_node is not None:
+                if node not in last_node.next:
+                    last_node.next.append(node)
+                    node.prev.append(last_node)
 
-        last_node = node
+            last_node = node
 
 potential_merges = list(nodes.values())
 while len(potential_merges) > 0:

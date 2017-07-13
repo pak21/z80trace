@@ -24,6 +24,16 @@ of a Spectrum booting to the "(c) 1982 Sinclair Research Ltd" message should
 you wish to try this out. Be warned that the Graphviz rendering can take a
 while.
 
+## Trace file format
+
+The trace file should consist of the list of PC values from the processor, one
+per line, with three additions:
+
+* `Interrupt` when an interrupt is accepted.
+* `CALL` on the line *after* a CALL instruction is actually taken (as opposed
+   to when something like a CALL NZ, nnnn is not taken because A was zero).
+* `RET` on the line *after* a RET instruction is actually taken.
+
 ## Any questions?
 
 Mail `philip-z80trace@shadowmagic.org.uk`.

@@ -1,0 +1,45 @@
+diff --git a/z80/z80.c b/z80/z80.c
+index 34ca7673..99971133 100644
+--- a/z80/z80.c
++++ b/z80/z80.c
+@@ -191,6 +191,8 @@ z80_interrupt( void )
+       F &= ~FLAG_P;
+     }
+ 
++    printf("Interrupt\n");
++
+     /* If interrupts have just been enabled, don't accept the interrupt now,
+        but check after the next instruction has been executed */
+     if( tstates == z80.interrupts_enabled_at ) {
+diff --git a/z80/z80_macros.h b/z80/z80_macros.h
+index 8e75e49e..085eac56 100644
+--- a/z80/z80_macros.h
++++ b/z80/z80_macros.h
+@@ -205,6 +205,7 @@ void contend_write_no_mreq( libspectrum_word address, libspectrum_dword time );
+ 
+ #define CALL()\
+ {\
++  printf("CALL\n");\
+   contend_read_no_mreq( PC, 1 ); PC++;\
+   PUSH16(PCL,PCH);\
+   PC=z80.memptr.w;\
+@@ -312,6 +313,7 @@ break
+ 
+ #define RET()\
+ {\
++  printf("RET\n");\
+   POP16(PCL,PCH);\
+   z80.memptr.w = PC;\
+ }
+diff --git a/z80/z80_ops.c b/z80/z80_ops.c
+index aba785c8..670d2687 100755
+--- a/z80/z80_ops.c
++++ b/z80/z80_ops.c
+@@ -332,6 +332,7 @@ z80_do_opcodes( void )
+     END_CHECK
+ 
+   end_opcode:
++    printf("%04x\n", PC);
+     PC++; R++;
+     switch(opcode) {
+ #include "z80/opcodes_base.c"
