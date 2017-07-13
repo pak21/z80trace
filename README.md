@@ -34,6 +34,10 @@ per line, with three additions:
    to when something like a CALL NZ, nnnn is not taken because A was zero).
 * `RET` on the line *after* a RET instruction is actually taken.
 
+There's a patch for [Fuse](https://fuse-emulator.sourceforge.net/) in
+`fuse-with-trace.patch` which will enable Fuse to create an appropriate trace
+file.
+
 ## Any questions?
 
 Mail `philip-z80trace@shadowmagic.org.uk`.
